@@ -1,0 +1,106 @@
+[gd_scene load_steps=28 format=2]
+
+[ext_resource path="res://assets/Sprites/AmyWalk3.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/Level1Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/Sprites/AmyNormalHurt.png" type="Texture" id=3]
+[ext_resource path="res://assets/Sprites/AmyWalk2.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/Punch.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/Sprites/AmyWalk4.png" type="Texture" id=6]
+[ext_resource path="res://assets/Sprites/AmyWalk7.png" type="Texture" id=7]
+[ext_resource path="res://assets/Sprites/AmyWalk5.png" type="Texture" id=8]
+[ext_resource path="res://assets/Sprites/AmyWalk6.png" type="Texture" id=9]
+[ext_resource path="res://assets/Sprites/AmyWalk8.png" type="Texture" id=10]
+[ext_resource path="res://assets/Sprites/AmyWalk1.png" type="Texture" id=11]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk2.png" type="Texture" id=12]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk6.png" type="Texture" id=13]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk7.png" type="Texture" id=14]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk4.png" type="Texture" id=15]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk1.png" type="Texture" id=16]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk5.png" type="Texture" id=17]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk3.png" type="Texture" id=18]
+[ext_resource path="res://assets/Sprites/AmyPunchWalk8.png" type="Texture" id=19]
+[ext_resource path="res://assets/Sprites/AmyNormalWalk3.png" type="Texture" id=20]
+[ext_resource path="res://assets/Sprites/AmyNormalWalk2.png" type="Texture" id=21]
+[ext_resource path="res://assets/Sprites/AmyNormalWalk4.png" type="Texture" id=22]
+[ext_resource path="res://assets/Sprites/AmyNormalWalk1.png" type="Texture" id=23]
+[ext_resource path="res://assets/Sprites/AmyNormalWalk5.png" type="Texture" id=24]
+[ext_resource path="res://assets/Sprites/AmyPunch.png" type="Texture" id=25]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 23 ) ],
+"loop": true,
+"name": "NormalIdle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 23 ), ExtResource( 22 ), ExtResource( 24 ), ExtResource( 22 ) ],
+"loop": true,
+"name": "NormalWalking",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 16 ), ExtResource( 12 ), ExtResource( 18 ), ExtResource( 15 ), ExtResource( 17 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 19 ) ],
+"loop": true,
+"name": "PunchWalking",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 4 ), ExtResource( 1 ), ExtResource( 6 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 7 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "GunWalking",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "GunIdle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "Hurt",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 6.38113
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 156.233, 95.2909 )
+collision_layer = 2
+collision_mask = 5
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+Punch = ExtResource( 5 )
+punch_cooldown = 0.3
+health_cooldown = 6
+max_health = 100
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+rotation = 1.5708
+frames = SubResource( 1 )
+animation = "Hurt"
+
+[node name="PunchSprite" type="Sprite" parent="."]
+visible = false
+position = Vector2( 1.04384, 0.463928 )
+rotation = 1.5708
+texture = ExtResource( 25 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -1.90735e-06, 7.62939e-06 )
+scale = Vector2( 1.22249, 1.18476 )
+shape = SubResource( 2 )
+
+[node name="Muzzle" type="Position2D" parent="."]
+position = Vector2( 13.5177, 3.32405 )
+
+[node name="Puncher" type="Position2D" parent="."]
+position = Vector2( 7.53885, 3.32405 )
+
+[node name="PunchTimer" type="Timer" parent="."]
+wait_time = 0.3
+
+[node name="HealthTimer" type="Timer" parent="."]
+wait_time = 5.0
+[connection signal="timeout" from="PunchTimer" to="." method="_on_PunchTimer_timeout"]
+[connection signal="timeout" from="HealthTimer" to="." method="_on_HealthTimer_timeout"]
